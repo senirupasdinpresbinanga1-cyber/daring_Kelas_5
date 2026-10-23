@@ -160,6 +160,7 @@
             <h2>Pembelajaran Daring</h2>
             <p id="displaySiswa">Memuat data...</p>
         </div>
+        <!-- TOMBOL KELUAR AKUN DI-PERTAHANKAN -->
         <button class="btn-nav" onclick="logout()" style="flex: unset; padding: 6px 12px; font-size: 11px;"><i class="fas fa-sign-out-alt"></i> Keluar Akun</button>
     </div>
 
@@ -466,7 +467,6 @@
             }, 1000);
         }
 
-        // Format Teks/Gambar Paling Akurat (Bisa membaca data:image Base64 URI, URL biasa, atau teks biasa)
         function formatKontenTeksAtauGambar(text) {
             if (!text) return "";
             var str = text.toString().trim();
@@ -600,19 +600,14 @@
             if (document.exitFullscreen) { document.exitFullscreen().catch(()=>{}); }
             else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
 
-            fetch(scriptURL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action: 'logout', nisn: nisnSiswa })
-            }).finally(() => {
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('nisnSiswa');
-                localStorage.removeItem('namaSiswa');
-                localStorage.removeItem('kelasSiswa');
-                localStorage.removeItem('role');
-                
-                window.location.href = 'index.html';
-            });
+            // Tombol keluar akun biasa membersihkan penyimpanan lokal saja tanpa mengubah status database jadi selesai prematur
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('nisnSiswa');
+            localStorage.removeItem('namaSiswa');
+            localStorage.removeItem('kelasSiswa');
+            localStorage.removeItem('role');
+            
+            window.location.href = 'index.html';
         }
     </script>
 </body>
