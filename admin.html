@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Pembelajaran Daring Seni Rupa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: linear-gradient(135deg, #0a0814 0%, #0f172a 100%); color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .header { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 18px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .header h1 { font-size: 18px; font-weight: 800; background: linear-gradient(90deg, #ff007a, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 10px; }
+        .container { padding: 30px; flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .box { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .stat-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px; text-align: center; border-radius: 14px; position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #ff007a, #00f2fe); }
+        .stat-card p { font-size: 11px; color: #94a3b8; font-weight: 700; letter-spacing: 1px; }
+        .stat-card h3 { font-size: 32px; margin-top: 8px; font-weight: 800; color: #00f2fe; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; overflow: hidden; border-radius: 10px; }
+        th, td { padding: 12px 16px; text-align: left; font-size: 13px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        th { background: rgba(15, 23, 42, 0.9); color: #cbd5e1; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: 700; }
+        tr:hover { background: rgba(255, 255, 255, 0.03); }
+        .btn { background: linear-gradient(135deg, #00f2fe, #4facfe); color: #0f172a; border: none; padding: 9px 18px; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
+        .btn-outline { background: transparent; color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-outline:hover { background: rgba(255, 255, 255, 0.1); border-color: #00f2fe; }
+        .btn-outline.active { background: linear-gradient(135deg, #ff007a, #7928ca); color: #fff; border-color: transparent; box-shadow: 0 4px 15px rgba(255, 0, 122, 0.4); }
+        .btn-danger { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #fff; border: none; padding: 6px 14px; font-size: 11px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .btn-danger:hover { box-shadow: 0 4px 12px rgba(255, 65, 108, 0.4); }
+        .btn-info { background: linear-gradient(135deg, #7928ca, #ff007a); color: #fff; border: none; padding: 6px 14px; font-size: 11px; border-radius: 6px; font-weight: 700; cursor: pointer; margin-right: 5px; }
+        
+        /* WARNA BADGE STATUS BARU */
+        .badge-status { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .status-belum { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); } /* Abu-abu default */
+        .status-login { background: rgba(0, 242, 254, 0.15); color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.3); } /* Biru muda */
+        .status-baca { background: rgba(255, 235, 59, 0.15); color: #ffeb3b; border: 1px solid rgba(255, 235, 59, 0.3); } /* Kuning */
+        .status-mengerjakan { background: rgba(255, 152, 0, 0.15); color: #ff9800; border: 1px solid rgba(255, 152, 0, 0.3); } /* Orange */
+        .status-selesai-tugas { background: rgba(46, 125, 50, 0.15); color: #4caf50; border: 1px solid rgba(46, 125, 50, 0.3); } /* Hijau tua */
+        .status-selesai { background: rgba(0, 230, 118, 0.15); color: #00e676; border: 1px solid rgba(0, 230, 118, 0.3); } /* Hijau */
+
+        .class-filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+        .filter-group { display: flex; gap: 10px; }
+
+        /* Modal Detail */
+        #detailModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(6, 5, 15, 0.85); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: #1e293b; border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 16px; padding: 25px; max-width: 700px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.7); }
+        .soal-item-detail { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1><i class="fas fa-user-shield"></i> Panel Admin Seni Rupa</h1>
+        <button class="btn btn-outline" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Keluar</button>
+    </div>
+
+    <div class="container">
+        <div class="stat-grid">
+            <div class="stat-card">
+                <p>TOTAL SISWA</p>
+                <h3 id="totSiswa">0</h3>
+            </div>
+        </div>
+
+        <div class="box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="font-weight: 800; letter-spacing: 0.5px;">Rekapitulasi Live Nilai & Status Siswa</h3>
+                <button class="btn btn-outline" onclick="loadData()"><i class="fas fa-sync-alt" id="syncIcon"></i> Refresh Data</button>
+            </div>
+
+            <div class="class-filter-bar">
+                <div class="filter-group">
+                    <button class="btn btn-outline active" id="btnKelas6A" onclick="filterKelas('6A')"><i class="fas fa-users"></i> Kelas 6A</button>
+                    <button class="btn btn-outline" id="btnKelas6B" onclick="filterKelas('6B')"><i class="fas fa-users"></i> Kelas 6B</button>
+                </div>
+                <button class="btn" style="background: linear-gradient(135deg, #00e676, #00b0ff); color: #000;" onclick="cetakPDFKelas()"><i class="fas fa-file-pdf"></i> Cetak PDF (Kelas <span id="lblKelasCetak">6A</span>)</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Absen</th>
+                            <th>Nama Siswa</th>
+                            <th>Kelas</th>
+                            <th>Status Pengerjaan</th>
+                            <th>Nilai</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailModal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 id="modalTitle" style="color: #00f2fe; font-size: 16px;">Detail Laporan Analisis Hasil</h3>
+                <button class="btn btn-danger" onclick="closeDetailModal()" style="padding: 4px 10px; font-size: 10px;">Tutup</button>
+            </div>
+            <div id="modalBody">Memuat data...</div>
+        </div>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby1XqvBwlfW_yu3IRz3-Mz3nnB1RrtTNzIpCxkRMV2cNy-UPcw902RY75zTFoThJQQ1fA/exec';
+
+        if (localStorage.getItem('isLoggedIn') !== 'true' || localStorage.getItem('role') !== 'admin') window.location.href = 'index.html';
+
+        let globalSiswa = [];
+        let globalLog = [];
+        let globalSoal = [];
+        let selectedKelas = '6A';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            setInterval(loadData, 5000);
+        });
+
+        function loadData() {
+            const syncIcon = document.getElementById('syncIcon');
+            if (syncIcon) syncIcon.classList.add('fa-spin');
+
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'getAdminData' })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (syncIcon) syncIcon.classList.remove('fa-spin');
+                if (data.status === 'success') {
+                    globalSiswa = data.siswa || [];
+                    globalLog = data.log || [];
+                    globalSoal = data.soal || [];
+
+                    document.getElementById('totSiswa').innerText = globalSiswa.length;
+                    renderTable();
+                }
+            })
+            .catch(() => {
+                if (syncIcon) syncIcon.classList.remove('fa-spin');
+            });
+        }
+
+        function filterKelas(kelasStr) {
+            selectedKelas = kelasStr;
+            document.getElementById('btnKelas6A').classList.toggle('active', kelasStr === '6A');
+            document.getElementById('btnKelas6B').classList.toggle('active', kelasStr === '6B');
+            document.getElementById('lblKelasCetak').innerText = kelasStr;
+            renderTable();
+        }
+
+        function renderTable() {
+            const filteredSiswa = globalSiswa.filter(s => {
+                const k = (s.kelas || "").toLowerCase().trim();
+                if (selectedKelas === '6A') return k.includes('6a') || k.includes('kelas a');
+                if (selectedKelas === '6B') return k.includes('6b') || k.includes('kelas b');
+                return true;
+            });
+
+            let logMap = {};
+            globalLog.forEach(l => {
+                logMap[l.nisn.toString().trim().toUpperCase()] = l;
+            });
+
+            let html = '';
+            filteredSiswa.forEach((s, idx) => {
+                const logItem = logMap[s.nisn.toString().trim().toUpperCase()];
+                let statusBadge = '<span class="badge-status status-belum">Belum Mengerjakan</span>';
+                let nilaiVal = '0';
+                let actionBtn = '-';
+
+                if (logItem) {
+                    let st = (logItem.status || "").toLowerCase();
+                    if (st === "sudah login") {
+                        statusBadge = `<span class="badge-status status-login">Sudah Login</span>`;
+                    } else if (st.includes("sedang membaca")) {
+                        statusBadge = `<span class="badge-status status-baca">Sedang Membaca</span>`;
+                    } else if (st.includes("sedang mengerjakan") || st.includes("mengerjakan")) {
+                        statusBadge = `<span class="badge-status status-mengerjakan">${logItem.status}</span>`;
+                    } else if (st === "selesai mengerjakan") {
+                        statusBadge = `<span class="badge-status status-selesai-tugas">Selesai Mengerjakan</span>`;
+                    } else if (st === "selesai") {
+                        statusBadge = `<span class="badge-status status-selesai">Selesai</span>`;
+                    } else {
+                        statusBadge = `<span class="badge-status status-belum">${logItem.status}</span>`;
+                    }
+
+                    nilaiVal = `<b style="color:#00f2fe; font-size:15px;">${logItem.nilai_akhir || 0}</b>`;
+                    actionBtn = `<button class="btn btn-info" onclick="bukaDetail('${s.nisn}')"><i class="fas fa-eye"></i> Detail</button>` +
+                                `<button class="btn btn-danger" onclick="resetSiswa('${s.nisn}')"><i class="fas fa-undo"></i> Reset</button>`;
+                }
+
+                html += `<tr>
+                    <td>${idx + 1}</td>
+                    <td><b>${s.nisn}</b></td>
+                    <td>${s.nama}</td>
+                    <td>${s.kelas}</td>
+                    <td>${statusBadge}</td>
+                    <td>${nilaiVal}</td>
+                    <td>${actionBtn}</td>
+                </tr>`;
+            });
+
+            document.getElementById('logTableBody').innerHTML = html || '<tr><td colspan="7" style="text-align:center; color:#94a3b8;">Tidak ada data siswa pada kelas ini.</td></tr>';
+        }
+
+        function bukaDetail(nisn) {
+            const logItem = globalLog.find(l => l.nisn.toString().trim().toUpperCase() === nisn.toString().trim().toUpperCase());
+            const siswaItem = globalSiswa.find(s => s.nisn.toString().trim().toUpperCase() === nisn.toString().trim().toUpperCase());
+            if (!logItem) return alert('Data jawaban tidak ditemukan.');
+
+            document.getElementById('modalTitle').innerText = `Detail Analisis: ${siswaItem ? siswaItem.nama : nisn}`;
+            
+            let userAns = {};
+            try { userAns = JSON.parse(logItem.raw_answers || '{}'); } catch(e){}
+
+            let html = `<p style="margin-bottom: 12px; font-size: 13px;">Nilai Akhir: <b style="color:#00f2fe">${logItem.nilai_akhir || 0}</b></p>`;
+            
+            globalSoal.forEach((soal, idx) => {
+                let kunci = (soal.kunci || "").trim().toUpperCase();
+                let jawabSiswa = (userAns[soal.id] || "-").trim().toUpperCase();
+                let isBenar = jawabSiswa === kunci;
+                let badgeColor = isBenar ? '#00e676' : '#ff416c';
+                let statusText = isBenar ? 'BENAR' : 'SALAH';
+
+                html += `<div class="soal-item-detail">
+                    <p><b>Soal ${idx + 1}:</b> ${soal.text}</p>
+                    <p style="margin-top: 5px;">Jawaban Siswa: <b>${jawabSiswa}</b> | Kunci: <b>${kunci}</b> | <span style="color:${badgeColor}; font-weight:700;">${statusText}</span></p>
+                </div>`;
+            });
+
+            if (logItem.tanda_tangan && logItem.tanda_tangan.startsWith('data:image')) {
+                html += `<div style="margin-top: 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                    <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 8px;">Tanda Tangan Digital Siswa:</p>
+                    <img src="${logItem.tanda_tangan}" style="background:#fff; border-radius:8px; max-width:250px; height:80px; object-fit:contain;" />
+                </div>`;
+            }
+
+            document.getElementById('modalBody').innerHTML = html;
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        function resetSiswa(nisn) {
+            if (!confirm('Reset pengerjaan siswa dengan NISN ' + nisn + '? Siswa dapat login kembali setelah di-reset.')) return;
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'resetSiswa', nisn: nisn })
+            })
+            .then(res => res.json())
+            .then(() => loadData());
+        }
+
+        function cetakPDFKelas() {
+            const filteredSiswa = globalSiswa.filter(s => {
+                const k = (s.kelas || "").toLowerCase().trim();
+                if (selectedKelas === '6A') return k.includes('6a') || k.includes('kelas a');
+                if (selectedKelas === '6B') return k.includes('6b') || k.includes('kelas b');
+                return true;
+            });
+
+            let logMap = {};
+            globalLog.forEach(l => {
+                logMap[l.nisn.toString().trim().toUpperCase()] = l;
+            });
+
+            let rowsHtml = '';
+            filteredSiswa.forEach((s, idx) => {
+                const logItem = logMap[s.nisn.toString().trim().toUpperCase()];
+                let nilaiVal = logItem ? (logItem.nilai_akhir || 0) : 0;
+                let ttdImg = (logItem && logItem.tanda_tangan && logItem.tanda_tangan.startsWith('data:image')) 
+                    ? `<img src="${logItem.tanda_tangan}" style="max-height:45px; max-width:120px; object-fit:contain;" />` 
+                    : '-';
+
+                rowsHtml += `<tr>
+                    <td style="text-align:center; padding:8px; border:1px solid #000;">${s.nisn}</td>
+                    <td style="padding:8px; border:1px solid #000;">${s.nama}</td>
+                    <td style="text-align:center; font-weight:bold; padding:8px; border:1px solid #000;">${nilaiVal}</td>
+                    <td style="text-align:center; padding:5px; border:1px solid #000;">${ttdImg}</td>
+                </tr>`;
+            });
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>DAFTAR NILAI DAN ABSENSI SISWA - KELAS ${selectedKelas}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; color: #000; }
+                        h2, h3 { text-align: center; margin: 4px 0; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+                        th { background-color: #f2f2f2; padding: 10px; border: 1px solid #000; font-weight: bold; }
+                        @media print {
+                            body { padding: 0; }
+                            @page { size: A4; margin: 1.5cm; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h2>REKAPITULASI DAFTAR NILAI SISWA</h2>
+                    <h3>PEMBELAJARAN DARING SENI RUPA - KELAS ${selectedKelas}</h3>
+                    <p style="text-align:center; font-size:11px; margin-top:5px;">SD INPRES BINANGA 1</p>
+                    <hr style="border:1px solid #000; margin-top:10px; margin-bottom:20px;">
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">Absen</th>
+                                <th style="width: 45%;">Nama Siswa</th>
+                                <th style="width: 15%;">Nilai</th>
+                                <th style="width: 25%;">Tanda Tangan Digital</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml || '<tr><td colspan="4" style="text-align:center; padding:10px; border:1px solid #000;">Tidak ada data siswa.</td></tr>'}
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 40px; float: right; text-align: center; font-size: 12px;">
+                        <p>Mamuju, ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                        <p style="margin-top: 50px; font-weight: bold; text-decoration: underline;">Guru Seni Rupa</p>
+                    </div>
+
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                        }
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
