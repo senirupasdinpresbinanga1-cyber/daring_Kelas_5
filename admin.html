@@ -32,19 +32,17 @@
         .btn-danger:hover { box-shadow: 0 4px 12px rgba(255, 65, 108, 0.4); }
         .btn-info { background: linear-gradient(135deg, #7928ca, #ff007a); color: #fff; border: none; padding: 6px 14px; font-size: 11px; border-radius: 6px; font-weight: 700; cursor: pointer; margin-right: 5px; }
         
-        /* WARNA BADGE STATUS BARU */
+        /* WARNA BADGE STATUS */
         .badge-status { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-        .status-belum { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); } /* Abu-abu default */
-        .status-login { background: rgba(0, 242, 254, 0.15); color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.3); } /* Biru muda */
-        .status-baca { background: rgba(255, 235, 59, 0.15); color: #ffeb3b; border: 1px solid rgba(255, 235, 59, 0.3); } /* Kuning */
-        .status-mengerjakan { background: rgba(255, 152, 0, 0.15); color: #ff9800; border: 1px solid rgba(255, 152, 0, 0.3); } /* Orange */
-        .status-selesai-tugas { background: rgba(46, 125, 50, 0.15); color: #4caf50; border: 1px solid rgba(46, 125, 50, 0.3); } /* Hijau tua */
-        .status-selesai { background: rgba(0, 230, 118, 0.15); color: #00e676; border: 1px solid rgba(0, 230, 118, 0.3); } /* Hijau */
+        .status-belum { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); } 
+        .status-login { background: rgba(0, 242, 254, 0.15); color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.3); } 
+        .status-baca { background: rgba(255, 235, 59, 0.15); color: #ffeb3b; border: 1px solid rgba(255, 235, 59, 0.3); } 
+        .status-mengerjakan { background: rgba(255, 152, 0, 0.15); color: #ff9800; border: 1px solid rgba(255, 152, 0, 0.3); } 
+        .status-selesai { background: rgba(0, 230, 118, 0.15); color: #00e676; border: 1px solid rgba(0, 230, 118, 0.3); } /* Hijau Selesai setelah TTD */
 
         .class-filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
         .filter-group { display: flex; gap: 10px; }
 
-        /* Modal Detail */
         #detailModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(6, 5, 15, 0.85); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: #1e293b; border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 16px; padding: 25px; max-width: 700px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.7); }
         .soal-item-detail { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 12px; }
@@ -185,8 +183,6 @@
                         statusBadge = `<span class="badge-status status-baca">Sedang Membaca</span>`;
                     } else if (st.includes("sedang mengerjakan") || st.includes("mengerjakan")) {
                         statusBadge = `<span class="badge-status status-mengerjakan">${logItem.status}</span>`;
-                    } else if (st === "selesai mengerjakan") {
-                        statusBadge = `<span class="badge-status status-selesai-tugas">Selesai Mengerjakan</span>`;
                     } else if (st === "selesai") {
                         statusBadge = `<span class="badge-status status-selesai">Selesai</span>`;
                     } else {
