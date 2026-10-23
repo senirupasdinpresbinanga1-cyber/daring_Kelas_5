@@ -47,14 +47,14 @@
         .btn-action:disabled { background: rgba(255, 255, 255, 0.08); color: #64748b; cursor: not-allowed; box-shadow: none; border: 1px solid rgba(255, 255, 255, 0.05); }
 
         .q-text { font-size: 15px; font-weight: 700; margin-bottom: 18px; line-height: 1.6; color: #f1f5f9; }
-        .q-text img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 10px; display: block; }
+        .q-text img { max-width: 100%; height: auto; border-radius: 10px; margin-top: 10px; display: block; border: 1px solid rgba(255,255,255,0.15); }
         
         .options-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
         .option-item { 
             background: rgba(15, 15, 35, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); padding: 14px 16px; 
             border-radius: 12px; cursor: pointer; font-size: 13px; transition: all 0.2s ease; display: flex; align-items: center; gap: 12px; 
         }
-        .option-item img { max-width: 120px; height: auto; border-radius: 6px; }
+        .option-item img { max-width: 140px; height: auto; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); }
         .option-item:hover { border-color: #00f2fe; background: rgba(0, 242, 254, 0.08); }
         .option-item.selected { border-color: #ff007a; background: rgba(255, 0, 122, 0.15); box-shadow: 0 0 15px rgba(255, 0, 122, 0.25); font-weight: 700; }
         .option-item.disabled { pointer-events: none; opacity: 0.7; }
@@ -346,7 +346,6 @@
             return canvas.toDataURL() === blank.toDataURL();
         }
 
-        // Algoritma Fisher-Yates untuk mengacak array soal secara unik per siswa
         function shuffleArray(array) {
             let currentIndex = array.length, randomIndex;
             while (currentIndex != 0) {
@@ -430,7 +429,6 @@
                             localStorage.setItem(STORAGE_KEY_SHUFFLED_SOAL, JSON.stringify(examData));
                         }
                     } else {
-                        // Acak soal agar urutan berbeda untuk masing-masing siswa (database tetap berurutan)
                         examData = shuffleArray([...data.data]);
                         localStorage.setItem(STORAGE_KEY_SHUFFLED_SOAL, JSON.stringify(examData));
                     }
@@ -468,11 +466,11 @@
             }, 1000);
         }
 
-        // Helper untuk menampilkan teks atau gambar jika berupa URL gambar
+        // Format Teks/Gambar Paling Akurat (Bisa membaca data:image Base64 URI, URL biasa, atau teks biasa)
         function formatKontenTeksAtauGambar(text) {
             if (!text) return "";
             var str = text.toString().trim();
-            if (str.indexOf("http://") === 0 || str.indexOf("https://") === 0) {
+            if (str.indexOf("data:image/") === 0 || str.indexOf("http://") === 0 || str.indexOf("https://") === 0) {
                 return `<img src="${str}" alt="Gambar Soal/Opsi" />`;
             }
             return str;
@@ -541,7 +539,6 @@
             document.getElementById('customConfirmModal').style.display = 'none';
         }
 
-        // Tahap Kumpul Tugas -> Berpindah ke Halaman Tanda Tangan Digital
         function executeSubmitTugas() {
             if (isFinished) return;
             closeConfirmModal();
@@ -555,7 +552,6 @@
             setTimeout(resizeCanvas, 100);
         }
 
-        // Tahap Setelah Tanda Tangan -> Kirim data lengkap + TTD ke server, lalu tampilkan Nilai
         function konfirmasiTandaTanganDanNilai() {
             const dataURL = canvas.toDataURL('image/png');
             if (isCanvasBlank()) {
