@@ -34,7 +34,6 @@
         .status-login { background: rgba(0, 242, 254, 0.15); color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.3); }
         .status-baca { background: rgba(255, 235, 59, 0.15); color: #ffeb3b; border: 1px solid rgba(255, 235, 59, 0.3); }
         .status-mengerjakan { background: rgba(255, 152, 0, 0.15); color: #ff9800; border: 1px solid rgba(255, 152, 0, 0.3); }
-        .status-selesai-tugas { background: rgba(46, 125, 50, 0.15); color: #4caf50; border: 1px solid rgba(46, 125, 50, 0.3); }
         .status-selesai { background: rgba(0, 230, 118, 0.15); color: #00e676; border: 1px solid rgba(0, 230, 118, 0.3); }
         
         .class-filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
@@ -148,8 +147,6 @@
                         statusBadge = `<span class="badge-status status-baca">Sedang Membaca</span>`;
                     } else if (st.includes("sedang mengerjakan") || st.includes("mengerjakan")) {
                         statusBadge = `<span class="badge-status status-mengerjakan">${logItem.status}</span>`;
-                    } else if (st === "selesai mengerjakan") {
-                        statusBadge = `<span class="badge-status status-selesai-tugas">Selesai Mengerjakan</span>`;
                     } else if (st === "selesai") {
                         statusBadge = `<span class="badge-status status-selesai">Selesai</span>`;
                     } else {
