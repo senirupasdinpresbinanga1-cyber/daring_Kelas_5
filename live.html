@@ -57,8 +57,8 @@
 
             <div class="class-filter-bar">
                 <div class="filter-group">
-                    <button class="btn btn-outline active" id="btnKelas6A" onclick="filterKelas('6A')"><i class="fas fa-users"></i> KELAS 5A</button>
-                    <button class="btn btn-outline" id="btnKelas6B" onclick="filterKelas('6B')"><i class="fas fa-users"></i> KELAS 5B</button>
+                    <button class="btn btn-outline active" id="btnKelas5A" onclick="filterKelas('5A')"><i class="fas fa-users"></i> KELAS 5A</button>
+                    <button class="btn btn-outline" id="btnKelas5B" onclick="filterKelas('5B')"><i class="fas fa-users"></i> KELAS 5B</button>
                 </div>
             </div>
 
@@ -84,7 +84,7 @@
 
         let globalSiswa = [];
         let globalLog = [];
-        let selectedKelas = '6A';
+        let selectedKelas = '5A';
 
         window.addEventListener('DOMContentLoaded', () => {
             loadData();
@@ -116,16 +116,16 @@
 
         function filterKelas(kelasStr) {
             selectedKelas = kelasStr;
-            document.getElementById('btnKelas6A').classList.toggle('active', kelasStr === '6A');
-            document.getElementById('btnKelas6B').classList.toggle('active', kelasStr === '6B');
+            document.getElementById('btnKelas5A').classList.toggle('active', kelasStr === '5A');
+            document.getElementById('btnKelas5B').classList.toggle('active', kelasStr === '5B');
             renderTable();
         }
 
         function renderTable() {
             const filteredSiswa = globalSiswa.filter(s => {
                 const k = (s.kelas || "").toLowerCase().trim();
-                if (selectedKelas === '6A') return k.includes('6a') || k.includes('kelas a');
-                if (selectedKelas === '6B') return k.includes('6b') || k.includes('kelas b');
+                if (selectedKelas === '5A') return k.includes('5a') || k.includes('kelas a');
+                if (selectedKelas === '5B') return k.includes('5b') || k.includes('kelas b');
                 return true;
             });
 
