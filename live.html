@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekapitulasi Live Nilai & Status Siswa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: linear-gradient(135deg, #0a0814 0%, #0f172a 100%); color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .header { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 18px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .header h1 { font-size: 18px; font-weight: 800; background: linear-gradient(90deg, #ff007a, #00f2fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 10px; }
+        
+        .container { padding: 30px; flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .box { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; overflow: hidden; border-radius: 10px; }
+        th, td { padding: 12px 16px; text-align: left; font-size: 13px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        th { background: rgba(15, 23, 42, 0.9); color: #cbd5e1; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: 700; }
+        tr:hover { background: rgba(255, 255, 255, 0.03); }
+        
+        .btn { background: linear-gradient(135deg, #00f2fe, #4facfe); color: #0f172a; border: none; padding: 9px 18px; font-weight: 700; font-size: 12px; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 242, 254, 0.3); }
+        .btn-outline { background: transparent; color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-outline:hover { background: rgba(255, 255, 255, 0.1); border-color: #00f2fe; }
+        .btn-outline.active { background: linear-gradient(135deg, #ff007a, #7928ca); color: #fff; border-color: transparent; box-shadow: 0 4px 15px rgba(255, 0, 122, 0.4); }
+        
+        /* WARNA BADGE STATUS */
+        .badge-status { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .status-belum { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); }
+        .status-login { background: rgba(0, 242, 254, 0.15); color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.3); }
+        .status-baca { background: rgba(255, 235, 59, 0.15); color: #ffeb3b; border: 1px solid rgba(255, 235, 59, 0.3); }
+        .status-mengerjakan { background: rgba(255, 152, 0, 0.15); color: #ff9800; border: 1px solid rgba(255, 152, 0, 0.3); }
+        .status-selesai-tugas { background: rgba(46, 125, 50, 0.15); color: #4caf50; border: 1px solid rgba(46, 125, 50, 0.3); }
+        .status-selesai { background: rgba(0, 230, 118, 0.15); color: #00e676; border: 1px solid rgba(0, 230, 118, 0.3); }
+        
+        .class-filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+        .filter-group { display: flex; gap: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1><i class="fas fa-chart-line"></i> Portal Pembelajaran Daring</h1>
+        <a href="index.html" class="btn btn-outline"><i class="fas fa-sign-in-alt"></i> Halaman Login</a>
+    </div>
+
+    <div class="container">
+        <div class="box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h3 style="font-weight: 800; letter-spacing: 0.5px; font-size: 18px;">Rekapitulasi Live Nilai & Status Siswa</h3>
+                <button class="btn btn-outline" onclick="loadData()"><i class="fas fa-sync-alt" id="syncIcon"></i> Refresh Data</button>
+            </div>
+
+            <div class="class-filter-bar">
+                <div class="filter-group">
+                    <button class="btn btn-outline active" id="btnKelas6A" onclick="filterKelas('6A')"><i class="fas fa-users"></i> KELAS 6A</button>
+                    <button class="btn btn-outline" id="btnKelas6B" onclick="filterKelas('6B')"><i class="fas fa-users"></i> KELAS 6B</button>
+                </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>NAMA SISWA</th>
+                            <th>STATUS PENGERJAAN</th>
+                            <th>NILAI</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTableBody">
+                        <tr><td colspan="3" style="text-align:center; color:#94a3b8;">Memuat data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycby1XqvBwlfW_yu3IRz3-Mz3nnB1RrtTNzIpCxkRMV2cNy-UPcw902RY75zTFoThJQQ1fA/exec';
+
+        let globalSiswa = [];
+        let globalLog = [];
+        let selectedKelas = '6A';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            setInterval(loadData, 5000);
+        });
+
+        function loadData() {
+            const syncIcon = document.getElementById('syncIcon');
+            if (syncIcon) syncIcon.classList.add('fa-spin');
+
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'getAdminData' })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (syncIcon) syncIcon.classList.remove('fa-spin');
+                if (data.status === 'success') {
+                    globalSiswa = data.siswa || [];
+                    globalLog = data.log || [];
+                    renderTable();
+                }
+            })
+            .catch(() => {
+                if (syncIcon) syncIcon.classList.remove('fa-spin');
+            });
+        }
+
+        function filterKelas(kelasStr) {
+            selectedKelas = kelasStr;
+            document.getElementById('btnKelas6A').classList.toggle('active', kelasStr === '6A');
+            document.getElementById('btnKelas6B').classList.toggle('active', kelasStr === '6B');
+            renderTable();
+        }
+
+        function renderTable() {
+            const filteredSiswa = globalSiswa.filter(s => {
+                const k = (s.kelas || "").toLowerCase().trim();
+                if (selectedKelas === '6A') return k.includes('6a') || k.includes('kelas a');
+                if (selectedKelas === '6B') return k.includes('6b') || k.includes('kelas b');
+                return true;
+            });
+
+            let logMap = {};
+            globalLog.forEach(l => {
+                logMap[l.nisn.toString().trim().toUpperCase()] = l;
+            });
+
+            let html = '';
+            filteredSiswa.forEach((s) => {
+                const logItem = logMap[s.nisn.toString().trim().toUpperCase()];
+                let statusBadge = '<span class="badge-status status-belum">Belum Mengerjakan</span>';
+                let nilaiVal = '0';
+
+                if (logItem) {
+                    let st = (logItem.status || "").toLowerCase();
+                    if (st === "sudah login") {
+                        statusBadge = `<span class="badge-status status-login">Sudah Login</span>`;
+                    } else if (st.includes("sedang membaca")) {
+                        statusBadge = `<span class="badge-status status-baca">Sedang Membaca</span>`;
+                    } else if (st.includes("sedang mengerjakan") || st.includes("mengerjakan")) {
+                        statusBadge = `<span class="badge-status status-mengerjakan">${logItem.status}</span>`;
+                    } else if (st === "selesai mengerjakan") {
+                        statusBadge = `<span class="badge-status status-selesai-tugas">Selesai Mengerjakan</span>`;
+                    } else if (st === "selesai") {
+                        statusBadge = `<span class="badge-status status-selesai">Selesai</span>`;
+                    } else {
+                        statusBadge = `<span class="badge-status status-belum">${logItem.status}</span>`;
+                    }
+
+                    nilaiVal = `<b style="color:#00f2fe; font-size:15px;">${logItem.nilai_akhir || 0}</b>`;
+                }
+
+                html += `<tr>
+                    <td>${s.nama}</td>
+                    <td>${statusBadge}</td>
+                    <td>${nilaiVal}</td>
+                </tr>`;
+            });
+
+            document.getElementById('logTableBody').innerHTML = html || '<tr><td colspan="3" style="text-align:center; color:#94a3b8;">Tidak ada data siswa pada kelas ini.</td></tr>';
+        }
+    </script>
+</body>
+</html>
